@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
+import Login from './Login';
+import { Switch, Route } from 'react-router-dom';
 
 function App() {
 
@@ -28,11 +30,18 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>File Upload Demo</h1>
-        <form encType="multipart/form-data" onSubmit={onSubmit}>
-          <input type="file" name="user_image" onChange={onFileChange} />
-          <button type="submit">Upload</button>
-        </form>
+
+        <Switch>
+          <Route exact path="/">
+            <h1>User Profile</h1>
+            <form encType="multipart/form-data" onSubmit={onSubmit}>
+              <input type="file" name="user_image" onChange={onFileChange} />
+              <button type="submit">Upload</button>
+            </form>
+          </Route>
+          <Route path="/login" component={Login}></Route>
+        </Switch>
+
 
       {/* DISPLAY SOME IMAGE FROM THE BACKEND - WE MUST SPECIFY THE WHOLE URL */}
       {/* <img src="http://localhost:8000/uploads/8b40739e58b3ac2eaa42634fb79ec142" width="500" /> */}

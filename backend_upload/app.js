@@ -9,7 +9,10 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -23,5 +26,10 @@ app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+// GENERIC ERROR HANDLER
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).send({error: err.message || err})
+})
 
 module.exports = app;
