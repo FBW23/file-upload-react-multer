@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 // express.static lets you serve files and whole folders
 app.use(express.static(path.join(__dirname, 'public')));
-app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
+app.use("/avatars", express.static(path.join(__dirname, 'uploads')));
 // /uploads/filename1
 // /uploads/filename2
 

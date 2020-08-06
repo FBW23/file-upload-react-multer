@@ -13,6 +13,17 @@ const db = {
 const JWT_SECRET = "holySecret123"
 
 
+// DONE
+//  FILE UPLOAD 
+//  LOGIN
+//  auth middleware X
+//  /me route => just get back info of the given user! X
+
+// WHAT'S LEFT
+//  file upload => store file with ID of user
+//  /me/image => serves the user specific avatar
+
+
 // authenticate user
 router.post('/login', (req, res, next) => {
 
@@ -36,16 +47,28 @@ router.post('/login', (req, res, next) => {
 
 // AUTH MIDDLEWARE => SECURITY AGENT
 const auth = (req, res, next) => {
-  next()
+
+  let token = req.cookies.token
+
+  if(!token) { return next({ message: "Token not provided", status: 401}) }
+
+  // verify the token and store the user information inside in the request for later usage
+  try {
+    let userDecoded = jwt.verify(token, JWT_SECRET)
+    req.user = userDecoded
+    next()
+  }
+  catch(err) { next(err) }
 }
 
-router.get('/me', (req, res, next) => {
-  // TODO: serve data of the user
+router.get('/me', auth, (req, res, next) => {
+  console.log("User: ", req.user)
+  res.send(req.user)
 })
 
-router.get('/me/image', (req, res, next) => {
-  // TODO: serve avatar image of the user
-})
+// router.get('/me/image', (req, res, next) => {
+//   // TODO: serve avatar image of the user
+// })
 
 /* GET users listing. */
 router.get('/', (req, res, next) => {
@@ -60,11 +83,11 @@ router.get('/', (req, res, next) => {
  */
 
  // upload.single("field_name_from_frontend")
-router.post('/upload', upload.single("user_image"), (req, res, next) => {
+router.patch('/me', auth, upload.single("user_image"), (req, res, next) => {
 
   // req.body // => normal JSON data
   // req.file // => meta info of uploaded file will be stored here
-  res.send(req.file)
+  res.send(req.user)
 })
 
 module.exports = router;

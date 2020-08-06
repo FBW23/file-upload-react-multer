@@ -2,43 +2,17 @@ import React, { useState } from 'react';
 import './App.css';
 import Login from './Login';
 import { Switch, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import Profile from './Profile';
 
 function App() {
-
-  let [file, setFile] = useState()
-
-  const onSubmit = (e) => {
-    e.preventDefault()
-
-    let formData = new FormData()
-    formData.append('user_image', file)
-
-    fetch('http://localhost:8000/users/upload', {
-      method: "POST",
-      body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log("Data received: ", data)
-    })
-  }
-
-  const onFileChange = (e) => {
-    setFile(e.target.files[0])
-  }
 
   return (
     <div className="App">
       <header className="App-header">
 
         <Switch>
-          <Route exact path="/">
-            <h1>User Profile</h1>
-            <form encType="multipart/form-data" onSubmit={onSubmit}>
-              <input type="file" name="user_image" onChange={onFileChange} />
-              <button type="submit">Upload</button>
-            </form>
-          </Route>
+          <Route exact path="/" component={Profile}></Route>
           <Route path="/login" component={Login}></Route>
         </Switch>
 
